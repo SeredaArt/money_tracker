@@ -19,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
     onPressed: () {
       _singOut();
     },
-    child: Container(child: Text('Выйти'), color: Colors.cyan)),
+    child: Text('Выйти')),
 
   ]));
   }

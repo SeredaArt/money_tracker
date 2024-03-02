@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_tracker/ui/home_page.dart';
 import 'package:money_tracker/ui/login_page.dart';
+import 'package:money_tracker/ui/register_page.dart';
+import 'package:money_tracker/ui/theme/theme.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,8 +29,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-    routerConfig: router,
-  );
+        theme: themeLight,
+        routerConfig: router,
+      );
 }
 
 class RoutingService {
@@ -44,14 +47,21 @@ class RoutingService {
         builder: (BuildContext context, GoRouterState state) =>
             const LoginPage(),
       ),
+      GoRoute(
+        path: '/register',
+        builder: (BuildContext context, GoRouterState state) =>
+            const RegisterPage(),
+      ),
     ],
 
     // redirect to the login page if the user is not logged in
     redirect: (BuildContext context, GoRouterState state) async {
       final bool loggedIn = FirebaseAuth.instance.currentUser != null;
       final bool loggingIn = state.matchedLocation == '/login';
+      if (state.matchedLocation == '/register') return '/register';
       if (!loggedIn) return '/login';
       if (loggingIn) return '/';
+
       // no need to redirect at all
       return null;
     },
