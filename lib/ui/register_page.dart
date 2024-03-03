@@ -1,26 +1,26 @@
-import 'dart:js';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:footer/footer.dart';
-import 'package:go_router/go_router.dart';
-import 'package:money_tracker/ui/login_page.dart';
+import 'package:money_tracker/ui/router.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+import 'auth.dart';
 
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
+class RegisterPage extends ConsumerWidget {
+  RegisterPage({super.key});
+  static String get routeName => 'register';
+  static String get routeLocation => '/$routeName';
 
-class _RegisterPageState extends State<RegisterPage> {
   String email = '';
   String password = '';
   final _controllerEmail = TextEditingController();
   final _controllerPassword = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.read(routerProvider);
+    final state = ref.watch(loadingStateProvider);
+
     return Scaffold(
         body: Column(children: [
       Expanded(child: SizedBox(height: 200, width: 200)),
@@ -68,10 +68,17 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                       onPressed: () {
-                        _createAccout(_controllerEmail.text,
-                            _controllerPassword.text, context);
+                        _createAccout(
+                            _controllerEmail.text, _controllerPassword.text, state);
                       },
-                      child: Text('Регистрация')))),
+                      child: state.isLoading
+                          ? const SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 3, color: Colors.white),
+                            )
+                          : Text('Регистрация')))),
         ]),
       ),
       Center(
@@ -80,9 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Text('Уже есть аккаунт?'),
           TextButton(
               onPressed: () {
-                setState(() {
-                  context.go('/login');
-                });
+                router.go('/login');
               },
               child: Text('Войти'))
         ]), //The child Widget is mandatory takes any Customisable Widget for the footer
@@ -91,19 +96,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-Future<void> _createAccout(
-    String emailAddress, String password, context) async {
+Future<void> _createAccout(String emailAddress, String password, state) async {
   try {
-    final credential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    state.startLoader();
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: emailAddress,
       password: password,
     );
-    if (FirebaseAuth.instance.currentUser == null) {
-      return;
-    } else {
-      context.go('/login');
-    }
+    state.stopLoader();
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
       print('The password provided is too weak.');

@@ -1,23 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:footer/footer.dart';
-import 'package:go_router/go_router.dart';
+import 'package:money_tracker/ui/router.dart';
+import 'auth.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginPage extends ConsumerWidget {
+  LoginPage({super.key});
+  static String get routeName => 'login';
+  static String get routeLocation => '/$routeName';
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
   final _controllerEmail = TextEditingController();
   final _controllerPassword = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.read(routerProvider);
+    final state = ref.watch(loadingStateProvider);
+
     return Scaffold(
       body: Column(children: [
         Expanded(child: Center()),
@@ -66,31 +68,42 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                         onPressed: () {
                           _singIn(
-                              _controllerEmail.text, _controllerPassword.text);
-                        },
-                        child: Text('Войти')))),
+                              _controllerEmail.text, _controllerPassword.text, state);
+                          },
+                        child: state.isLoading
+                            ? const SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 3, color: Colors.white),
+                              )
+                            : Text('Войти')))),
           ]),
         ),
-        Center(child: Footer(
-            child:
-               Row(children: [Text('Eщё нет аккаунта?'), TextButton(onPressed: () {
-
-                 setState(() {
-                   context.go('/register');
-                 });
-               }, child: Text('Регистрация'))]), //The child Widget is mandatory takes any Customisable Widget for the footer
-
-            ))
+        Center(
+            child: Footer(
+          child: Row(children: [
+            Text('Eщё нет аккаунта?'),
+            TextButton(
+                onPressed: () {
+                  router.go('/register');
+                },
+                child: Text('Регистрация'))
+          ]), //The child Widget is mandatory takes any Customisable Widget for the footer
+        ))
       ]),
     );
   }
 }
 
-Future<void> _singIn(String emailAddress, String password) async {
+Future<void> _singIn(String emailAddress, String password, state) async {
+
+
   try {
-    final credential = await FirebaseAuth.instance
+    state.startLoader();
+    await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: emailAddress, password: password);
-    int a = 0;
+    state.stopLoader();
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
       print('No user found for that email.');
