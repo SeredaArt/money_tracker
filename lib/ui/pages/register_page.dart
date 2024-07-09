@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:footer/footer.dart';
 import 'package:money_tracker/ui/router.dart';
 
-import 'auth.dart';
+import '../auth.dart';
 
 class RegisterPage extends ConsumerWidget {
   RegisterPage({super.key});
@@ -23,11 +23,11 @@ class RegisterPage extends ConsumerWidget {
 
     return Scaffold(
         body: Column(children: [
-      Expanded(child: SizedBox(height: 200, width: 200)),
+      const Expanded(child: SizedBox(height: 200, width: 200)),
       Expanded(
         child: Column(children: [
           Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: const EdgeInsets.only(left: 15, right: 15),
               child: TextFormField(
                 controller: _controllerEmail,
                 decoration: const InputDecoration(
@@ -45,7 +45,7 @@ class RegisterPage extends ConsumerWidget {
                 },
               )),
           Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: const EdgeInsets.only(left: 15, right: 15),
               child: TextFormField(
                 controller: _controllerPassword,
                 decoration: const InputDecoration(
@@ -63,7 +63,7 @@ class RegisterPage extends ConsumerWidget {
                 },
               )),
           Padding(
-              padding: EdgeInsets.only(left: 30, right: 30),
+              padding: const EdgeInsets.only(left: 30, right: 30),
               child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -78,18 +78,18 @@ class RegisterPage extends ConsumerWidget {
                               child: CircularProgressIndicator(
                                   strokeWidth: 3, color: Colors.white),
                             )
-                          : Text('Регистрация')))),
+                          : const Text('Регистрация')))),
         ]),
       ),
       Center(
           child: Footer(
         child: Row(children: [
-          Text('Уже есть аккаунт?'),
+          const Text('Уже есть аккаунт?'),
           TextButton(
               onPressed: () {
                 router.go('/login');
               },
-              child: Text('Войти'))
+              child: const Text('Войти'))
         ]), //The child Widget is mandatory takes any Customisable Widget for the footer
       ))
     ]));

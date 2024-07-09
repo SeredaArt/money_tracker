@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:footer/footer.dart';
 import 'package:money_tracker/ui/router.dart';
-import 'auth.dart';
+import '../auth.dart';
 
 class LoginPage extends ConsumerWidget {
   LoginPage({super.key});
@@ -20,13 +20,14 @@ class LoginPage extends ConsumerWidget {
     final router = ref.read(routerProvider);
     final state = ref.watch(loadingStateProvider);
 
-    return Scaffold(
+    return
+      Scaffold(
       body: Column(children: [
-        Expanded(child: Center()),
+        const Expanded(child: Center()),
         Expanded(
           child: Column(children: [
             Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 child: TextFormField(
                   controller: _controllerEmail,
                   decoration: const InputDecoration(
@@ -44,7 +45,7 @@ class LoginPage extends ConsumerWidget {
                   },
                 )),
             Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 child: TextFormField(
                   controller: _controllerPassword,
                   decoration: const InputDecoration(
@@ -62,7 +63,7 @@ class LoginPage extends ConsumerWidget {
                   },
                 )),
             Padding(
-                padding: EdgeInsets.only(left: 30, right: 30),
+                padding: const EdgeInsets.only(left: 30, right: 30),
                 child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -77,18 +78,18 @@ class LoginPage extends ConsumerWidget {
                                 child: CircularProgressIndicator(
                                     strokeWidth: 3, color: Colors.white),
                               )
-                            : Text('Войти')))),
+                            : const Text('Войти')))),
           ]),
         ),
         Center(
             child: Footer(
           child: Row(children: [
-            Text('Eщё нет аккаунта?'),
+            const Text('Eщё нет аккаунта?'),
             TextButton(
                 onPressed: () {
                   router.go('/register');
                 },
-                child: Text('Регистрация'))
+                child: const Text('Регистрация'))
           ]), //The child Widget is mandatory takes any Customisable Widget for the footer
         ))
       ]),
@@ -110,7 +111,7 @@ Future<void> _singIn(String emailAddress, String password, state) async {
     } else if (e.code == 'wrong-password') {
       print('Wrong password provided for that user.');
     } else if (e.code == 'invalid-credential') {
-      AlertDialog(title: Text('Wrong password provided for that user.'));
+      const AlertDialog(title: Text('Wrong password provided for that user.'));
     }
   }
 }

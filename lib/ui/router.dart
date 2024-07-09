@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:money_tracker/ui/register_page.dart';
+import 'package:money_tracker/ui/pages/register_page.dart';
 import 'package:money_tracker/ui/splash_page.dart';
 import 'auth.dart';
-import 'home_page.dart';
-import 'login_page.dart';
+import 'pages/home_page.dart';
+import 'pages/login_page.dart';
 
 final _key = GlobalKey<NavigatorState>();
 
@@ -36,7 +36,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: HomePage.routeLocation,
         name: HomePage.routeName,
         builder: (context, state) {
-          return const HomePage();
+          return HomePage();
         },
       ),
       GoRoute(
