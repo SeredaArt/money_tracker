@@ -27,6 +27,7 @@ class LoginPage extends ConsumerWidget {
         Expanded(
           child: Column(children: [
             Padding(
+
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: TextFormField(
                   controller: _controllerEmail,

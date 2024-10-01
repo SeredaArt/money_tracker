@@ -34,6 +34,7 @@ class HomePage extends ConsumerWidget {
         builder: (context) => AlertDialog(
               title: const Text('Create category'),
               content: Column(children: [
+
                 TextField(
                     decoration: const InputDecoration(hintText: 'Name'),
                     controller: _nameController),

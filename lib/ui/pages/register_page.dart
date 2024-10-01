@@ -73,6 +73,7 @@ class RegisterPage extends ConsumerWidget {
                       },
                       child: state.isLoading
                           ? const SizedBox(
+
                               height: 30,
                               width: 30,
                               child: CircularProgressIndicator(
